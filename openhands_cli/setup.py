@@ -6,7 +6,7 @@ from prompt_toolkit import HTML, print_formatted_text
 from openhands.sdk import Agent, BaseConversation, Conversation, Workspace
 from openhands.sdk.context import AgentContext, Skill
 from openhands.sdk.security.confirmation_policy import (
-    AlwaysConfirm,
+    ConfirmationPolicyBase,
 )
 from openhands.sdk.security.llm_analyzer import LLMSecurityAnalyzer
 
@@ -96,7 +96,7 @@ def verify_agent_exists_or_setup_agent() -> Agent:
 
 
 def setup_conversation(
-    conversation_id: UUID, include_security_analyzer: bool = True
+    conversation_id: UUID, confirmation_policy: ConfirmationPolicyBase
 ) -> BaseConversation:
     """
     Setup the conversation with agent.
@@ -104,6 +104,7 @@ def setup_conversation(
     Args:
         conversation_id: conversation ID to use. If not provided, a random UUID
             will be generated.
+        confirmation_policy: Confirmation policy to use.
 
     Raises:
         MissingAgentSpec: If agent specification is not found or invalid.
@@ -123,12 +124,8 @@ def setup_conversation(
         visualizer=CLIVisualizer,
     )
 
-    # Security analyzer is set though conversation API now
-    if not include_security_analyzer:
-        conversation.set_security_analyzer(None)
-    else:
-        conversation.set_security_analyzer(LLMSecurityAnalyzer())
-        conversation.set_confirmation_policy(AlwaysConfirm())
+    conversation.set_security_analyzer(LLMSecurityAnalyzer())
+    conversation.set_confirmation_policy(confirmation_policy)
 
     print_formatted_text(
         HTML(f"<green>✓ Agent initialized with model: {agent.llm.model}</green>")
