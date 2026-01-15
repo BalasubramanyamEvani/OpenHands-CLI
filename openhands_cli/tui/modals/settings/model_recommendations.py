@@ -8,9 +8,9 @@ Source: https://docs.openhands.dev/openhands/usage/llms/llms#cloud-/-api-based-m
 """
 
 from collections.abc import Iterator
-from dataclasses import dataclass
 from typing import Literal
 
+from pydantic import BaseModel, ConfigDict
 from textual.widgets import Static
 
 
@@ -25,8 +25,7 @@ CLOUD_CATEGORY_TITLE = "Cloud / API-Based Models"
 LOCAL_CATEGORY_TITLE = "Local / Self-Hosted Models"
 
 
-@dataclass(frozen=True)
-class ModelRecommendation:
+class ModelRecommendation(BaseModel):
     """Represents a model recommendation with its details.
 
     Attributes:
@@ -36,6 +35,8 @@ class ModelRecommendation:
         use_cases: Description of what tasks this model excels at
         notes: Additional notes or information about the model
     """
+
+    model_config = ConfigDict(frozen=True)
 
     name: str
     provider: str
