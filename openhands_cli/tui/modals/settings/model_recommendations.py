@@ -60,6 +60,16 @@ class ModelRecommendation(BaseModel):
 # Cloud / API-Based Models
 CLOUD_MODELS: list[ModelRecommendation] = [
     ModelRecommendation(
+        name="claude-opus-4-5-20251101",
+        provider="anthropic",
+        is_recommended=True,
+        use_cases="Coding, agents, computer use, complex problem solving",
+        notes=(
+            "State-of-the-art on SWE-bench Verified. "
+            "Best model for coding and agentic workflows"
+        ),
+    ),
+    ModelRecommendation(
         name="claude-sonnet-4-5-20250929",
         provider="anthropic",
         is_recommended=True,
